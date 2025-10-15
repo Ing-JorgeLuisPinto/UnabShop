@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable (route = "login" ) {
-                    LoginScreen()
+                    LoginScreen(navController = navController)
                 }
                 composable (route = "register"){
                     RegisterScreen()
