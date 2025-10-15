@@ -34,10 +34,10 @@ class MainActivity : ComponentActivity() {
                     LoginScreen(navController = navController)
                 }
                 composable (route = "register"){
-                    RegisterScreen()
+                    RegisterScreen(navController = navController)
                 }
                 composable (route = "home"){
-                    HomeScreen()
+                    HomeScreen(navController = navController)
                 }
             }
         }
