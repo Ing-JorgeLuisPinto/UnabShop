@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import me.jorgepinto.unabshop.ui.theme.UnabShopTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +26,8 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
             val startDestination = "login"
+
+
 
             NavHost(
                 navController = navController,
