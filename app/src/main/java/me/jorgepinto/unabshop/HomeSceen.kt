@@ -1,5 +1,6 @@
 package me.jorgepinto.unabshop
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,18 +21,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-
-
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -50,8 +48,15 @@ fun HomeScreen(navController: NavController) {
                     IconButton(onClick = { }) {
                         Icon(Icons.Filled.ShoppingCart, "Carrito")
                     }
-                    IconButton(onClick = { }) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, "Carrito")
+                    IconButton(onClick = {
+                        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                        prefs.edit().putBoolean("is_logged_in", false).apply()
+
+                        navController.navigate("login") {
+                            popUpTo("home") { inclusive = true }
+                        }
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, "Cerrar sesión")
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -60,24 +65,17 @@ fun HomeScreen(navController: NavController) {
                     actionIconContentColor = Color.White
                 )
             )
-        },
-        bottomBar = {
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF5F5F5))
-                .padding(paddingValues)
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("HOME SCREEN", fontSize = 30.sp)
-            }
+            Text("HOME SCREEN", fontSize = 30.sp)
         }
     }
 }

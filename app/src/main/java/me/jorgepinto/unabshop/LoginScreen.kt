@@ -1,6 +1,7 @@
 package me.jorgepinto.unabshop
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,17 +36,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.auth
@@ -56,6 +56,7 @@ fun LoginScreen(navController: NavController){
 
     val auth = Firebase.auth
     val activity = LocalView.current.context as Activity
+    val context = LocalContext.current
 
     //Estados
     var inputEmail by remember { mutableStateOf("") }
@@ -179,6 +180,10 @@ fun LoginScreen(navController: NavController){
                         auth.signInWithEmailAndPassword(inputEmail, inputPassword)
                             .addOnCompleteListener (activity) { task ->
                                 if (task.isSuccessful){
+
+                                    val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                                    prefs.edit().putBoolean("is_logged_in", true).apply()
+
                                     navController.navigate("home") {
                                         popUpTo("login") { inclusive = true }
                                     }

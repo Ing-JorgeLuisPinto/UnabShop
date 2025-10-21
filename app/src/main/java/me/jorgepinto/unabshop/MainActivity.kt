@@ -5,42 +5,36 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import me.jorgepinto.unabshop.ui.theme.UnabShopTheme
+import android.content.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val isLoggedIn = prefs.getBoolean("is_logged_in", false)
+
         setContent {
-
             val navController = rememberNavController()
-            val startDestination = "login"
-
-
+            val startDestination = if (isLoggedIn) "home" else "login"
 
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
                 modifier = Modifier.fillMaxSize()
             ) {
-                composable (route = "login" ) {
+                composable("login") {
                     LoginScreen(navController = navController)
                 }
-                composable (route = "register"){
+                composable("register") {
                     RegisterScreen(navController = navController)
                 }
-                composable (route = "home"){
+                composable("home") {
                     HomeScreen(navController = navController)
                 }
             }
